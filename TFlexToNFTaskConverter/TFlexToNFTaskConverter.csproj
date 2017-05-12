@@ -42,11 +42,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConWorker.cs" />
+    <Compile Include="Models\CommonGeometry\Contour.cs" />
+    <Compile Include="Models\CommonGeometry\Part.cs" />
+    <Compile Include="Models\CommonGeometry\Point.cs" />
+    <Compile Include="Models\CommonGeometry\Task.cs" />
+    <Compile Include="Models\TFlexNestingTask.cs" />
+    <Compile Include="Models\TFlexNestingTask\FigureContour.cs" />
+    <Compile Include="Models\TFlexNestingTask\ContourLine.cs" />
+    <Compile Include="Models\TFlexNestingTask\PartDefinition.cs" />
+    <Compile Include="Models\TFlexNestingTask\PartProfile.cs" />
+    <Compile Include="Models\TFlexNestingTask\Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

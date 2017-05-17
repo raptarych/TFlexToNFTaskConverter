@@ -48,6 +48,8 @@
     <Compile Include="Models\CommonGeometry\Point.cs" />
     <Compile Include="Models\CommonGeometry\Task.cs" />
     <Compile Include="Models\TFlexNestingTask.cs" />
+    <Compile Include="Models\TFlexNestingTask\BaseContourObject.cs" />
+    <Compile Include="Models\TFlexNestingTask\ContourArc.cs" />
     <Compile Include="Models\TFlexNestingTask\FigureContour.cs" />
     <Compile Include="Models\TFlexNestingTask\ContourLine.cs" />
     <Compile Include="Models\TFlexNestingTask\PartDefinition.cs" />

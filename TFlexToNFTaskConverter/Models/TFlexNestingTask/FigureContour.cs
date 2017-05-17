@@ -33,8 +33,9 @@ namespace TFlexToNFTaskConverter.Models
         }
 
         [XmlArray("Objects")]
-        [XmlArrayItem("ContourObject")]
-        public List<ContourLine> Objects { get; set; }
+        [XmlArrayItem(Type = typeof(ContourLine)),
+        XmlArrayItem(Type = typeof(ContourArc))]
+        public List<ContourObject> Objects { get; set; }
     }
 
     public enum TFlexOrientationType

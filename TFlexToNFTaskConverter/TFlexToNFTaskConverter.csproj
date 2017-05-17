@@ -47,20 +47,25 @@
     <Compile Include="Models\CommonGeometry\Part.cs" />
     <Compile Include="Models\CommonGeometry\Point.cs" />
     <Compile Include="Models\CommonGeometry\Task.cs" />
-    <Compile Include="Models\TFlexNestingTask.cs" />
-    <Compile Include="Models\TFlexNestingTask\BaseContourObject.cs" />
+    <Compile Include="Models\TFlexTask.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contour.cs" />
+    <Compile Include="Models\TFlexNestingTask\ContourObject.cs" />
     <Compile Include="Models\TFlexNestingTask\ContourArc.cs" />
     <Compile Include="Models\TFlexNestingTask\FigureContour.cs" />
     <Compile Include="Models\TFlexNestingTask\ContourLine.cs" />
     <Compile Include="Models\TFlexNestingTask\PartDefinition.cs" />
     <Compile Include="Models\TFlexNestingTask\PartProfile.cs" />
     <Compile Include="Models\TFlexNestingTask\Point.cs" />
+    <Compile Include="Models\TFlexNestingTask\Sheets\RectangleSheet.cs" />
+    <Compile Include="Models\TFlexNestingTask\Sheets\SheetDefinition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\TFlexNestingTask\Parts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

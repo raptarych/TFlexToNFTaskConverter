@@ -25,9 +25,10 @@ namespace TFlexToNFTaskConverter
                 var extension = string.Join("", fileName.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
                 if (extension == "tfnesting")
                 {
-                    var deserializer = new XmlSerializer(typeof(TFlexNestingTask));
+                    var deserializer = new XmlSerializer(typeof(TFlexTask));
                     TextReader textReader = new StreamReader(fileName);
-                    var entity = (TFlexNestingTask) deserializer.Deserialize(textReader);
+                    var entity = (TFlexTask) deserializer.Deserialize(textReader);
+                    Console.WriteLine($"Name: {entity.Name}\nProject type: {entity.ProjectType}\nParts count: {entity.Parts.Count}");
                 }
             }
         }

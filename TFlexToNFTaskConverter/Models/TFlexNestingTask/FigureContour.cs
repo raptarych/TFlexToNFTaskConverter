@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace TFlexToNFTaskConverter.Models
+namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
 
     /// <summary>
     /// Сущность контура детали TFlex/Раскрой
     /// </summary>
-    public class FigureContour
+    public class FigureContour : Contour
     {
         [XmlElement("Orientation")]
         public string _orientation { get; set; }
@@ -33,8 +33,9 @@ namespace TFlexToNFTaskConverter.Models
         }
 
         [XmlArray("Objects")]
-        [XmlArrayItem(Type = typeof(ContourLine)),
-        XmlArrayItem(Type = typeof(ContourArc))]
+        [XmlArrayItem(Type = typeof(ContourObject)),
+        XmlArrayItem(Type = typeof(ContourArc)),
+        XmlArrayItem(Type = typeof(ContourLine))]
         public List<ContourObject> Objects { get; set; }
     }
 

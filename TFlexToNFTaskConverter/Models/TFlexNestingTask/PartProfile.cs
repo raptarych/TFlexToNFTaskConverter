@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace TFlexToNFTaskConverter.Models
+namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     /// <summary>
     /// Сущность профиля детали TFlex/Раскрой
@@ -13,8 +13,9 @@ namespace TFlexToNFTaskConverter.Models
     public class PartProfile
     {
         public double Area { get; set; }
-        [XmlArrayAttribute("Contours")]
-        [XmlArrayItem("Contour")]
-        public List<FigureContour> Contours { get; set; }
+        [XmlArray("Contours")]
+        [XmlArrayItem(Type = typeof(Contour)),
+         XmlArrayItem(Type = typeof(FigureContour))]
+        public List<Contour> Contours { get; set; }
     }
 }

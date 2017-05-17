@@ -1,6 +1,6 @@
 ﻿
 
-namespace TFlexToNFTaskConverter.Models
+namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
 
     /// <summary>

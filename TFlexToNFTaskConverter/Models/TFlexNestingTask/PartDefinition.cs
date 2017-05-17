@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TFlexToNFTaskConverter.Models
+namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     /// <summary>
     /// Сущность детали TFlex/Раскрой

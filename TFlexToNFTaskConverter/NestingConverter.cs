@@ -17,11 +17,17 @@ namespace TFlexToNFTaskConverter
         /// <summary>
         /// Вспомогательный метод - приведение координаты к съедаемому NF виду
         /// </summary>
-        private string FormatNumber(double x) => x != 0 ? x.ToString("##.#####").Replace(",", ".") : "0";
+        private string FormatNumber(double x) => x != 0 ? (-x).ToString("##.#####").Replace(",", ".") : "0";
 
+        /// <summary>
+        /// Запись точки в файл формата NF
+        /// </summary>
         private void AddVertex(StreamWriter partFile, Point p, double b = 0) =>
-            partFile.Write(string.Join("\t", "VERTEX:", FormatNumber(p.X), FormatNumber(p.Y), FormatNumber(b)) + "\n");
+            partFile.Write(string.Join("\t", "VERTEX:", FormatNumber(-p.X), FormatNumber(p.Y), FormatNumber(b)) + "\n");
 
+        /// <summary>
+        /// Запись детали в отдельный файл
+        /// </summary>
         private void WriteItemToFile(StreamWriter partFile, PartProfile part)
         {
             foreach (var contour in part.Contours)
@@ -39,7 +45,10 @@ namespace TFlexToNFTaskConverter
                         break;
                     case FigureContour figureContour:
                         partFile.Write(string.Join("\t", "VERTQUANT:", figureContour.Objects.Count + 1) + "\n");
-                        var isFirst = true;
+
+                        //т.к. точка Begin текущего элемента контура равна End предыдущего элемента - нет смысла её писать в файл для всех элементов контуров кроме первого
+                        var isFirst = true; 
+
                         foreach (var obj in figureContour.Objects)
                         {
                             switch (obj)
@@ -51,7 +60,7 @@ namespace TFlexToNFTaskConverter
                                         AddVertex(partFile, new Point(arc.Begin.X, arc.Begin.Y), bulge);
                                         isFirst = false;
                                     }
-                                    AddVertex(partFile, new Point(arc.End.X, arc.End.Y), bulge);
+                                    AddVertex(partFile, new Point(arc.End.X, arc.End.Y));
                                     break;
                                 default:
                                     if (isFirst)
@@ -67,6 +76,13 @@ namespace TFlexToNFTaskConverter
                 }
             }
         }
+        /// <summary>
+        /// Экспорт задания на раскрой в папку в формате NF
+        /// </summary>
+        /// <param name="input">Задание в формате TFlex</param>
+        /// <param name="destination">Название папки</param>
+        /// <param name="folderPath">Путь к папке</param>
+        /// 
         public void SaveToNestingFactory(TFlexTask input, string destination, string folderPath)
         {
             if (!Directory.Exists(folderPath)) throw new Exception("Directory doesn't exits");
@@ -74,10 +90,9 @@ namespace TFlexToNFTaskConverter
             if (Directory.Exists(destination))
             {
                 Console.WriteLine("Directory is already exists. Overwrite it? y/n");
-                var yesOrNo = Console.ReadKey().KeyChar;
-                if (yesOrNo.ToString().ToLowerInvariant() == "y")
+                var yesOrNo = Console.ReadLine();
+                if (yesOrNo.ToLowerInvariant().StartsWith("y"))
                 {
-                    Console.Write("\n");
                     foreach (var fileToDelete in Directory.GetFiles(destination))
                         File.Delete(fileToDelete);
 
@@ -98,25 +113,14 @@ namespace TFlexToNFTaskConverter
                 }
             }
 
-            foreach (var sheet in input.Sheets)
+            foreach (var sheet in input.Sheets.Where(sheet => !(sheet is RectangularSheet)))
             {
                 var filePath = $"{destination}\\{sheet.ID}_sheet.item";
                 using (var sheetFile = File.CreateText(filePath))
                 {
                     sheetFile.Write(string.Join("\t", "ITEMNAME:", sheet.Name ?? sheet.ID.ToString()) + "\n");
-                    switch (sheet)
-                    {
-                        case RectangularSheet rect:
-                            sheetFile.Write(string.Join("\t", "VERTQUANT:", 4) + "\n");
-                            AddVertex(sheetFile, new Point(0, 0));
-                            AddVertex(sheetFile, new Point(rect.Width, 0));
-                            AddVertex(sheetFile, new Point(rect.Width, rect.Length));
-                            AddVertex(sheetFile, new Point(0, rect.Length));
-                            break;
-                        case ContourSheet cont:
-                            WriteItemToFile(sheetFile, cont.SheetProfile);
-                            break;
-                    }
+                    if (sheet is ContourSheet cont)
+                        WriteItemToFile(sheetFile, cont.SheetProfile);
                     sheetFile.Close();
                 }
             }
@@ -129,8 +133,19 @@ namespace TFlexToNFTaskConverter
                 taskFile.Write(string.Join("\t", "TIMELIMIT:", 3600000) + "\n");
                 taskFile.Write(string.Join("\t", "TASKTYPE:", "Sheet") + "\n");
                 foreach (var sheet in input.Sheets)
-                    taskFile.Write(string.Join("\t", "DOMAINFILE:", $"{sheet.ID}_sheet.item") + "\n");
-                taskFile.Write(string.Join("\t", "SHEETQUANT:", input.Sheets.Count) + "\n");
+                {
+                    switch (sheet)
+                    {
+                        case ContourSheet cont:
+                            taskFile.Write(string.Join("\t", "DOMAINFILE:", $"{cont.ID}_sheet.item") + "\n");
+                            break;
+                        case RectangularSheet rect:
+                            taskFile.Write(string.Join("\t", "WIDTH:", FormatNumber(rect.Width)) + "\n");
+                            taskFile.Write(string.Join("\t", "LENGTH:", FormatNumber(rect.Length)) + "\n");
+                            break;
+                    }
+                    taskFile.Write(string.Join("\t", "SHEETQUANT:", sheet.Count) + "\n");
+                }
                 taskFile.Write(string.Join("\t", "ITEM2DOMAINDIST:", 5) + "\n");    //TODO
                 taskFile.Write(string.Join("\t", "ITEM2ITEMDIST:", 5) + "\n");      //TODO
                 foreach (var item in input.Parts)

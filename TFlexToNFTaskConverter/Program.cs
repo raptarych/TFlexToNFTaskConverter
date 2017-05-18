@@ -30,6 +30,7 @@ namespace TFlexToNFTaskConverter
                     var deserializer = new XmlSerializer(typeof(TFlexTask));
                     TextReader textReader = new StreamReader(fileName);
                     var entity = (TFlexTask) deserializer.Deserialize(textReader);
+                    Console.WriteLine($"{fileName} loaded into buffer!");
                     Console.WriteLine($"Name: {entity.Name}\nProject type: {entity.ProjectType}");
                     Console.WriteLine($"Parts count: {entity.Parts.Count}");
                     Console.WriteLine($"Sheets: {entity.Sheets.Count}");
@@ -43,7 +44,7 @@ namespace TFlexToNFTaskConverter
                 commandName = string.Join("", fileName.TakeWhile(ch => ch != ' '));
                 if (string.IsNullOrEmpty(commandName)) return;
 
-                if (commandName.ToLowerInvariant() == "nf")
+                if (commandName.ToLowerInvariant() == "-nf")
                 {
                     fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
                     if (string.IsNullOrEmpty(fileName)) return;

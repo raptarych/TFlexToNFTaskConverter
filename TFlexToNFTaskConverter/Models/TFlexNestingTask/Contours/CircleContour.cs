@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     /// <summary>
-    /// Базовая сущность контура окружности
+    /// Окружность
     /// </summary>
     public class CircleContour : Contour
     {

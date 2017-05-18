@@ -43,22 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConWorker.cs" />
-    <Compile Include="Models\CommonGeometry\Contour.cs" />
-    <Compile Include="Models\CommonGeometry\Part.cs" />
-    <Compile Include="Models\CommonGeometry\Point.cs" />
-    <Compile Include="Models\CommonGeometry\Task.cs" />
-    <Compile Include="Models\TFlexNestingTask\CircleContour.cs" />
-    <Compile Include="Models\TFlexNestingTask\ContourSheet.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\CircleContour.cs" />
+    <Compile Include="Models\TFlexNestingTask\Sheets\ContourSheet.cs" />
     <Compile Include="Models\TFlexNestingTask\FigureParams.cs" />
     <Compile Include="Models\TFlexNestingTask\NestingResult.cs" />
     <Compile Include="Models\TFlexNestingTask\ResultPartPosition.cs" />
-    <Compile Include="Models\TFlexNestingTask\SheerLayout.cs" />
+    <Compile Include="Models\TFlexNestingTask\Sheets\SheerLayout.cs" />
     <Compile Include="Models\TFlexTask.cs" />
-    <Compile Include="Models\TFlexNestingTask\Contour.cs" />
-    <Compile Include="Models\TFlexNestingTask\ContourObject.cs" />
-    <Compile Include="Models\TFlexNestingTask\ContourArc.cs" />
-    <Compile Include="Models\TFlexNestingTask\FigureContour.cs" />
-    <Compile Include="Models\TFlexNestingTask\ContourLine.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\Contour.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\ContourObject.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\ContourArc.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\FigureContour.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\ContourLine.cs" />
     <Compile Include="Models\TFlexNestingTask\PartDefinition.cs" />
     <Compile Include="Models\TFlexNestingTask\PartProfile.cs" />
     <Compile Include="Models\TFlexNestingTask\Point.cs" />

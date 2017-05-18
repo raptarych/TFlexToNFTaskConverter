@@ -11,6 +11,7 @@ namespace TFlexToNFTaskConverter
 {
     class Program
     {
+        private static TFlexTask Buffer;
         static void CommandHandler(string S)
         {
             var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
@@ -33,8 +34,24 @@ namespace TFlexToNFTaskConverter
                     Console.WriteLine($"Parts count: {entity.Parts.Count}");
                     Console.WriteLine($"Sheets: {entity.Sheets.Count}");
                     Console.WriteLine($"Results: {entity.Results.Count}");
+
+                    Buffer = entity;
                 }
             }
+            if (commandName == "save")
+            {
+                commandName = string.Join("", fileName.TakeWhile(ch => ch != ' '));
+                if (string.IsNullOrEmpty(commandName)) return;
+
+                if (commandName.ToLowerInvariant() == "nf")
+                {
+                    fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
+                    if (string.IsNullOrEmpty(fileName)) return;
+                    var converter = new NestingConverter();
+                    converter.SaveToNestingFactory(Buffer, fileName, Directory.GetCurrentDirectory());
+                }
+            }
+
         }
         static void Main(string[] args)
         {

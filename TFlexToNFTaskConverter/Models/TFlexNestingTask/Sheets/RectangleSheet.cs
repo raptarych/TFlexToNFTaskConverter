@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
-    public class RectangleSheet : SheetDefinition
+    public class RectangularSheet : SheetDefinition
     {
         public int Width { get; set; }
         public int Length { get; set; }

@@ -18,11 +18,11 @@ namespace TFlexToNFTaskConverter.Models
         public string Name { get; set; }
         public string ProjectType { get; set; }
         [XmlArray("Parts")]
-        public List<PartDefinition> Parts { get; set; }
+        public List<PartDefinition> Parts { get; set; } = new List<PartDefinition>();
 
-        /*[XmlArray("Sheets")]
+        [XmlArray("Sheets")]
         [XmlArrayItem(Type = typeof(SheetDefinition)),
-         XmlArrayItem(Type = typeof(RectangleSheet))]
-        public List<SheetDefinition> Sheets { get; set; }*/
+         XmlArrayItem(Type = typeof(RectangularSheet))]
+        public List<SheetDefinition> Sheets { get; set; } = new List<SheetDefinition>();
     }
 }

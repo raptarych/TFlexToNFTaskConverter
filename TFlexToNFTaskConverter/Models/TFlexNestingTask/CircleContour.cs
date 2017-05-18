@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     /// <summary>
-    /// Базовая сущность элементарного объекта контура (линия)
+    /// Базовая сущность контура окружности
     /// </summary>
-    public abstract class ContourObject
+    public class CircleContour : Contour
     {
-        public Point Begin { get; set; }
-        public Point End { get; set; }
+        public Point Center { get; set; }
+        public double Radius { get; set; }
     }
 }

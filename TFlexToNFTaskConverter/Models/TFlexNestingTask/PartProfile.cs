@@ -15,7 +15,8 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public double Area { get; set; }
         [XmlArray("Contours")]
         [XmlArrayItem(Type = typeof(Contour)),
-         XmlArrayItem(Type = typeof(FigureContour))]
+         XmlArrayItem(Type = typeof(FigureContour)),
+         XmlArrayItem(Type = typeof(CircleContour))]
         public List<Contour> Contours { get; set; }
     }
 }

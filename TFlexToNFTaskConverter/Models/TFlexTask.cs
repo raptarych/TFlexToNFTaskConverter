@@ -22,7 +22,14 @@ namespace TFlexToNFTaskConverter.Models
 
         [XmlArray("Sheets")]
         [XmlArrayItem(Type = typeof(SheetDefinition)),
-         XmlArrayItem(Type = typeof(RectangularSheet))]
+         XmlArrayItem(Type = typeof(RectangularSheet)),
+         XmlArrayItem(Type = typeof(ContourSheet))]
         public List<SheetDefinition> Sheets { get; set; } = new List<SheetDefinition>();
+
+        public FigureParams FigureParams { get; set; }
+        [XmlArray("Results")]
+        [XmlArrayItem("NestingResult")]
+        public List<NestingResult> Results { get; set; } = new List<NestingResult>();
+
     }
 }

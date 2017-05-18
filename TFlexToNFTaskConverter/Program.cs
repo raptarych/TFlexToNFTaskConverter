@@ -32,6 +32,7 @@ namespace TFlexToNFTaskConverter
                     Console.WriteLine($"Name: {entity.Name}\nProject type: {entity.ProjectType}");
                     Console.WriteLine($"Parts count: {entity.Parts.Count}");
                     Console.WriteLine($"Sheets: {entity.Sheets.Count}");
+                    Console.WriteLine($"Results: {entity.Results.Count}");
                 }
             }
         }

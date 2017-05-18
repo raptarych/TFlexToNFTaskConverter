@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     /// <summary>
-    /// Базовая сущность элементарного объекта контура (линия)
+    /// Фигурный контур TFlex
     /// </summary>
-    public abstract class ContourObject
+    public class ContourSheet : SheetDefinition
     {
-        public Point Begin { get; set; }
-        public Point End { get; set; }
+        public PartProfile SheetProfile { get; set; }
     }
 }

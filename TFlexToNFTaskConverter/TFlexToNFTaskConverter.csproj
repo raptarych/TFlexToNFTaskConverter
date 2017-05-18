@@ -47,6 +47,12 @@
     <Compile Include="Models\CommonGeometry\Part.cs" />
     <Compile Include="Models\CommonGeometry\Point.cs" />
     <Compile Include="Models\CommonGeometry\Task.cs" />
+    <Compile Include="Models\TFlexNestingTask\CircleContour.cs" />
+    <Compile Include="Models\TFlexNestingTask\ContourSheet.cs" />
+    <Compile Include="Models\TFlexNestingTask\FigureParams.cs" />
+    <Compile Include="Models\TFlexNestingTask\NestingResult.cs" />
+    <Compile Include="Models\TFlexNestingTask\ResultPartPosition.cs" />
+    <Compile Include="Models\TFlexNestingTask\SheerLayout.cs" />
     <Compile Include="Models\TFlexTask.cs" />
     <Compile Include="Models\TFlexNestingTask\Contour.cs" />
     <Compile Include="Models\TFlexNestingTask\ContourObject.cs" />
@@ -58,6 +64,7 @@
     <Compile Include="Models\TFlexNestingTask\Point.cs" />
     <Compile Include="Models\TFlexNestingTask\Sheets\RectangleSheet.cs" />
     <Compile Include="Models\TFlexNestingTask\Sheets\SheetDefinition.cs" />
+    <Compile Include="NestingConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

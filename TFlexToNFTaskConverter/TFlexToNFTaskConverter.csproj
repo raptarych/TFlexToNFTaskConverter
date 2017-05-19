@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ConWorker.cs" />
     <Compile Include="Models\TFlexNestingTask\Contours\CircleContour.cs" />
+    <Compile Include="Models\TFlexNestingTask\Contours\RectangularContour.cs" />
     <Compile Include="Models\TFlexNestingTask\Sheets\ContourSheet.cs" />
     <Compile Include="Models\TFlexNestingTask\FigureParams.cs" />
     <Compile Include="Models\TFlexNestingTask\NestingResult.cs" />

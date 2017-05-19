@@ -34,6 +34,14 @@ namespace TFlexToNFTaskConverter
             {
                 switch (contour)
                 {
+                    case RectangularContour rect:
+                        partFile.Write(string.Join("\t", "VERTQUANT:", 4) + "\n");
+                        AddVertex(partFile, new Point(0, 0));
+                        AddVertex(partFile, new Point(rect.Width, 0));
+                        AddVertex(partFile, new Point(rect.Width, rect.Length));
+                        AddVertex(partFile, new Point(0, rect.Length));
+
+                        break;
                     case CircleContour circle:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 2) + "\n");
 
@@ -126,7 +134,7 @@ namespace TFlexToNFTaskConverter
             }
 
             var taskPath = $"{destination}\\{input.Name ?? "nest"}.task";
-
+            if (!Uri.IsWellFormedUriString(taskPath, UriKind.RelativeOrAbsolute)) taskPath = $"{destination}\\task.task";
             using (var taskFile = File.CreateText(taskPath))
             {
                 taskFile.Write(string.Join("\t", "TASKNAME:", input.Name ?? "nest") + "\n");

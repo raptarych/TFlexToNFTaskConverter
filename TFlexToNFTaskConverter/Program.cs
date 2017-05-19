@@ -12,6 +12,8 @@ namespace TFlexToNFTaskConverter
     class Program
     {
         private static TFlexTask Buffer;
+
+        static string GetExtension(string S) => string.Join("", S.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
         static void CommandHandler(string S)
         {
             var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
@@ -23,10 +25,10 @@ namespace TFlexToNFTaskConverter
                     Console.WriteLine("File doesn't exist!");
                     return;
                 }
-                var extension = string.Join("", fileName.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
+                var extension = GetExtension(fileName);
                 if (extension == "tfnesting")
                 {
-                    Console.WriteLine($"Loading {fileName}...");
+                    Console.WriteLine($"\nLoading {fileName}...");
                     var deserializer = new XmlSerializer(typeof(TFlexTask));
                     TextReader textReader = new StreamReader(fileName);
                     var entity = (TFlexTask) deserializer.Deserialize(textReader);
@@ -56,9 +58,27 @@ namespace TFlexToNFTaskConverter
         }
         static void Main(string[] args)
         {
-            var conHandler = new ConWorker();
-            conHandler.AddHandler(CommandHandler);
-            conHandler.Start();
+            if (args.Length == 0)
+            {
+                var conHandler = new ConWorker();
+                conHandler.AddHandler(CommandHandler);
+                conHandler.Start();
+                return;
+            }
+            
+            if (args.Length == 2)
+            {
+                if (GetExtension(args[0]) == "tfnesting" && !string.IsNullOrEmpty(args[1]))
+                {
+                    //чуть костыльнул - может быть потом нормально перепишу
+                    CommandHandler($"load {args[0]}");
+                    CommandHandler($"save -nf {args[1]}");
+                    return;
+                } else Console.WriteLine("Bad arguments\n");
+
+            } else Console.WriteLine("Less then 2 arguments!\n");
+            Console.WriteLine("Using:");
+            Console.WriteLine("TFlexToNFTaskConverter.exe task.tfnesting out_nf_folder");
         }
     }
 }

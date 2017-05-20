@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TFlexToNFTaskConverter.Models;
 using TFlexToNFTaskConverter.Models.TFlexNestingTask;
 
@@ -36,20 +37,20 @@ namespace TFlexToNFTaskConverter
                 {
                     case RectangularContour rect:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 4) + "\n");
-                        AddVertex(partFile, new Point(0, 0));
-                        AddVertex(partFile, new Point(rect.Width, 0));
-                        AddVertex(partFile, new Point(rect.Width, rect.Length));
-                        AddVertex(partFile, new Point(0, rect.Length));
+                        AddVertex(partFile, new Point());
+                        AddVertex(partFile, new Point { X = rect.Width });
+                        AddVertex(partFile, new Point { X = rect.Width, Y = rect.Length });
+                        AddVertex(partFile, new Point { Y = rect.Length });
 
                         break;
                     case CircleContour circle:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 2) + "\n");
 
-                        var leftPoint = circle.Center - new Point(circle.Radius, 0);
-                        var rightPoint = circle.Center + new Point(circle.Radius, 0);
+                        var leftPoint = new Point { X = circle.Radius - circle.Center.X, Y = circle.Center.Y };
+                        var rightPoint = new Point { X = circle.Radius + circle.Center.X, Y = circle.Center.Y };
 
-                        AddVertex(partFile, new Point(leftPoint.X, leftPoint.Y), 1);
-                        AddVertex(partFile, new Point(rightPoint.X, rightPoint.Y), 1);
+                        AddVertex(partFile, leftPoint, 1);
+                        AddVertex(partFile, rightPoint, 1);
                         break;
                     case FigureContour figureContour:
                         partFile.Write(string.Join("\t", "VERTQUANT:", figureContour.Objects.Count + 1) + "\n");
@@ -65,18 +66,18 @@ namespace TFlexToNFTaskConverter
                                     var bulge = Math.Tan(arc.Angle / 4) * (arc.Ccw ? -1 : 1);
                                     if (isFirst)
                                     {
-                                        AddVertex(partFile, new Point(arc.Begin.X, arc.Begin.Y), bulge);
+                                        AddVertex(partFile, arc.Begin, bulge);
                                         isFirst = false;
                                     }
-                                    AddVertex(partFile, new Point(arc.End.X, arc.End.Y));
+                                    AddVertex(partFile, arc.End);
                                     break;
                                 default:
                                     if (isFirst)
                                     {
-                                        AddVertex(partFile, new Point(obj.Begin.X, obj.Begin.Y));
+                                        AddVertex(partFile, obj.Begin);
                                         isFirst = false;
                                     }
-                                    AddVertex(partFile, new Point(obj.End.X, obj.End.Y));
+                                    AddVertex(partFile, obj.End);
                                     break;
                             }
                         }
@@ -84,6 +85,7 @@ namespace TFlexToNFTaskConverter
                 }
             }
         }
+
         /// <summary>
         /// Экспорт задания на раскрой в папку в формате NF
         /// </summary>
@@ -173,6 +175,18 @@ namespace TFlexToNFTaskConverter
                 }
                 taskFile.Close();
             }
+        }
+
+        public void SaveToTFlex(TFlexTask input, string fileName, string folderPath)
+        {
+            fileName = $"{folderPath}\\{fileName}";
+            if (!fileName.EndsWith(".tfnesting")) fileName = $"{fileName}.tfnesting";
+
+            var serializer = new XmlSerializer(typeof(TFlexTask));
+            using (var xmlFile = File.CreateText(fileName))
+                serializer.Serialize(xmlFile, input);
+            
+            
         }
     }
 }

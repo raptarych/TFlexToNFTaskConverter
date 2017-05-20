@@ -11,9 +11,9 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     /// </summary>
     public class FigureParams
     {
-        public int PartDistance { get; set; }
+        public double PartDistance { get; set; }
         public bool PartInPartMode { get; set; }
-        public int RotationStep { get; set; }
+        public double RotationStep { get; set; }
         public string Direction { get; set; }
         public double PresentationPrecisionRatio { get; set; }
     }

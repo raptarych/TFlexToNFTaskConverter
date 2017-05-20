@@ -9,15 +9,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     /// </summary>
     public class Point
     {
-        public Point() {}
-
-        public Point(double x, double y, double b = 0)
-        {
-            X = x;
-            Y = y;
-            B = b;
-        }
-
         public double X { get; set; }
         public double Y { get; set; }
         [XmlIgnore]
@@ -27,10 +18,10 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         [XmlIgnore]
         public double Length => Math.Sqrt(X * X + Y * Y);
         public Point Normalize() => this / Length;
-        public Point Rotate(double angle) => new Point(X * Math.Cos(angle) - Y * Math.Sin(angle), Y * Math.Cos(angle) + X * Math.Sin(angle));
-        public static Point operator -(Point p1, Point p2) => new Point(p1.X - p2.X, p1.Y - p2.Y);
-        public static Point operator +(Point p1, Point p2) => new Point(p1.X + p2.X, p1.Y + p2.Y);
-        public static Point operator /(Point p1, double i) => new Point(p1.X / i, p1.Y / i);
-        public static Point operator *(Point p1, double i) => new Point(p1.X * i, p1.Y * i);
+        public Point Rotate(double angle) => new Point {X = X * Math.Cos(angle) - Y * Math.Sin(angle), Y = Y * Math.Cos(angle) + X * Math.Sin(angle)};
+        public static Point operator -(Point p1, Point p2) => new Point { X = p1.X - p2.X, Y = p1.Y - p2.Y};
+        public static Point operator +(Point p1, Point p2) => new Point { X = p1.X + p2.X, Y = p1.Y + p2.Y };
+        public static Point operator /(Point p1, double i) => new Point { X = p1.X / i, Y = p1.Y / i };
+        public static Point operator *(Point p1, double i) => new Point { X = p1.X * i, Y = p1.Y * i };
     }
 }

@@ -8,7 +8,7 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
     public class RectangularSheet : SheetDefinition
     {
-        public int Width { get; set; }
-        public int Length { get; set; }
+        public double Width { get; set; }
+        public double Length { get; set; }
     }
 }

@@ -12,41 +12,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     /// </summary>
     public class Contour
     {
-        [XmlElement("Orientation")]
-        public string _orientation { get; set; }
-
-        public TFlexOrientationType Orientation
-        {
-            get
-            {
-                switch (_orientation)
-                {
-                    case "Negative":
-                        return TFlexOrientationType.Negative;
-                    case "Positive":
-                        return TFlexOrientationType.Positive;
-                    default:
-                        return TFlexOrientationType.Unknown;
-                }
-            }
-            set
-            {
-                switch (value)
-                {
-                    case TFlexOrientationType.Negative:
-                        _orientation = "Negative";
-                        break;
-                    case TFlexOrientationType.Positive:
-                        _orientation = "Positive";
-                        break;
-                }
-            }
-        }
-    }
-    public enum TFlexOrientationType
-    {
-        Unknown = 0,
-        Negative = 1,
-        Positive = 2
+        public string Orientation { get; set; }
     }
 }

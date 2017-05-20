@@ -59,13 +59,18 @@ namespace TFlexToNFTaskConverter
                         if (string.IsNullOrEmpty(fileName)) return;
                         var converter = new NestingConverter();
                         converter.SaveToNestingFactory(Buffer, fileName, Directory.GetCurrentDirectory());
+                    } else if (commandName.ToLowerInvariant() == "-tflex")
+                    {
+                        fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
+                        if (string.IsNullOrEmpty(fileName)) return;
+                        var converter = new NestingConverter();
+                        converter.SaveToTFlex(Buffer, fileName, Directory.GetCurrentDirectory());
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
-                Console.Write(ex.StackTrace);
+                Console.Write($"{ex.Message}\n{ex.StackTrace}\n");
             }
 
         }

@@ -26,11 +26,12 @@ namespace TFlexToNFTaskConverter.Models
          XmlArrayItem(Type = typeof(ContourSheet))]
         public List<SheetDefinition> Sheets { get; set; } = new List<SheetDefinition>();
 
-        public FigureParams FigureParams { get; set; }
+        public FigureParams FigureParams { get; set; } = new FigureParams();
         [XmlArray("Results")]
         [XmlArrayItem("NestingResult")]
         public List<NestingResult> Results { get; set; } = new List<NestingResult>();
 
         public int GetNewSheetId() => Sheets.Any() ? Sheets.Max(sheet => sheet.ID) + 1 : 0;
+        public int GetNewPartId() => Parts.Any() ? Parts.Max(part => part.ID) + 1 : 0;
     }
 }

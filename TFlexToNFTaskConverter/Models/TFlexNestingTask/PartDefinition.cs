@@ -15,7 +15,7 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public int Count { get; set; }
         public string FilePath { get; set; }
         public PartProfile PartProfile { get; set; }
-        public int AngleStep { get; set; }
+        public double AngleStep { get; set; }
         public bool DisableTurn { get; set; }
         public bool OverturnAllowed { get; set; }
         public string Name { get; set; }

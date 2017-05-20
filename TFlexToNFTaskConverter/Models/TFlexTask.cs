@@ -31,5 +31,6 @@ namespace TFlexToNFTaskConverter.Models
         [XmlArrayItem("NestingResult")]
         public List<NestingResult> Results { get; set; } = new List<NestingResult>();
 
+        public int GetNewSheetId() => Sheets.Any() ? Sheets.Max(sheet => sheet.ID) + 1 : 0;
     }
 }

@@ -29,6 +29,18 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
                         return TFlexOrientationType.Unknown;
                 }
             }
+            set
+            {
+                switch (value)
+                {
+                    case TFlexOrientationType.Negative:
+                        _orientation = "Negative";
+                        break;
+                    case TFlexOrientationType.Positive:
+                        _orientation = "Positive";
+                        break;
+                }
+            }
         }
     }
     public enum TFlexOrientationType

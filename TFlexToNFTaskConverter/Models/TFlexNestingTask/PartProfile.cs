@@ -18,6 +18,12 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
          XmlArrayItem(Type = typeof(FigureContour)),
          XmlArrayItem(Type = typeof(CircleContour)),
          XmlArrayItem(Type = typeof(RectangularContour))]
-        public List<Contour> Contours { get; set; }
+        public List<Contour> Contours { get; set; } = new List<Contour>();
+
+        /// <summary>
+        /// Сугубо для парсера NF
+        /// </summary>
+        [XmlIgnore]
+        public string ItemName { get; set; }
     }
 }

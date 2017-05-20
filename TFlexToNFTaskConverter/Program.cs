@@ -13,46 +13,59 @@ namespace TFlexToNFTaskConverter
     {
         private static TFlexTask Buffer;
 
-        static string GetExtension(string S) => string.Join("", S.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
+        public static string GetExtension(string S)
+        {
+            var extension = string.Join("", S.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
+            if (S == extension || string.IsNullOrEmpty(extension)) return "";
+            return extension;
+        }
         static void CommandHandler(string S)
         {
-            var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
-            var fileName = string.Join("",S.SkipWhile(ch => ch != ' ').Skip(1));
-            if (commandName == "load")
+            try
             {
-                if (!File.Exists(fileName))
+                var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
+                var fileName = string.Join("", S.SkipWhile(ch => ch != ' ').Skip(1));
+                if (commandName == "load")
                 {
-                    Console.WriteLine("File doesn't exist!");
-                    return;
-                }
-                var extension = GetExtension(fileName);
-                if (extension == "tfnesting")
-                {
-                    Console.WriteLine($"\nLoading {fileName}...");
-                    var deserializer = new XmlSerializer(typeof(TFlexTask));
-                    TextReader textReader = new StreamReader(fileName);
-                    var entity = (TFlexTask) deserializer.Deserialize(textReader);
-                    Console.WriteLine($"{fileName} loaded into buffer!");
-                    Console.WriteLine($"Name: {entity.Name}\nProject type: {entity.ProjectType}");
-                    Console.WriteLine($"Parts count: {entity.Parts.Count}");
-                    Console.WriteLine($"Sheets: {entity.Sheets.Count}");
-                    Console.WriteLine($"Results: {entity.Results.Count}");
+                    var loader = new TaskLoader();
 
-                    Buffer = entity;
+
+                    var extension = GetExtension(fileName);
+                    if (extension == "tfnesting")
+                    {
+                        Buffer = loader.LoadTFlexTask(fileName);
+                        return;
+                    }
+                    if (extension == "" && Directory.Exists(fileName))
+                    {
+                        Buffer = loader.LoadNfTask(fileName);
+                        return;
+                    }
+
+                    if (!File.Exists(fileName))
+                    {
+                        Console.WriteLine("File doesn't exist!");
+                        return;
+                    }
+                }
+                if (commandName == "save")
+                {
+                    commandName = string.Join("", fileName.TakeWhile(ch => ch != ' '));
+                    if (string.IsNullOrEmpty(commandName)) return;
+
+                    if (commandName.ToLowerInvariant() == "-nf")
+                    {
+                        fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
+                        if (string.IsNullOrEmpty(fileName)) return;
+                        var converter = new NestingConverter();
+                        converter.SaveToNestingFactory(Buffer, fileName, Directory.GetCurrentDirectory());
+                    }
                 }
             }
-            if (commandName == "save")
+            catch (Exception ex)
             {
-                commandName = string.Join("", fileName.TakeWhile(ch => ch != ' '));
-                if (string.IsNullOrEmpty(commandName)) return;
-
-                if (commandName.ToLowerInvariant() == "-nf")
-                {
-                    fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
-                    if (string.IsNullOrEmpty(fileName)) return;
-                    var converter = new NestingConverter();
-                    converter.SaveToNestingFactory(Buffer, fileName, Directory.GetCurrentDirectory());
-                }
+                Console.Write(ex.Message);
+                Console.Write(ex.StackTrace);
             }
 
         }

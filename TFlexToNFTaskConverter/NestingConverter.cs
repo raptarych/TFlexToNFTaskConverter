@@ -183,10 +183,32 @@ namespace TFlexToNFTaskConverter
             if (!fileName.EndsWith(".tfnesting")) fileName = $"{fileName}.tfnesting";
 
             var serializer = new XmlSerializer(typeof(TFlexTask));
-            using (var xmlFile = File.CreateText(fileName))
+            using (var xmlFile = File.CreateText(fileName + ".tmp"))        //костылище TODO TODO TODO
+            {
                 serializer.Serialize(xmlFile, input);
-            
-            
+            }
+
+            //костылище TODO
+            using (var xmlFile = File.OpenText(fileName + ".tmp"))
+            {
+                using (var niceFile = File.CreateText(fileName))
+                {
+                    while (!xmlFile.EndOfStream)
+                    {
+                        var line = xmlFile.ReadLine();
+                        line = line.Replace("<FigureContour>", "<Contour xsi:type=\"FigureContour\">");
+                        line = line.Replace("<CircleContour>", "<Contour xsi:type=\"CircleContour\">");
+                        line = line.Replace("<RectangularContour>", "<Contour xsi:type=\"RectangularContour\">");
+                        line = line.Replace("<ContourArc>", "<ContourObject xsi:type=\"ContourArc\">");
+                        line = line.Replace("<ContourLine>", "<ContourObject xsi:type=\"ContourLine\">");
+                        line = line.Replace("<RectangularSheet>", "<SheetDefinition xsi:type=\"RectangularSheet\">");
+                        line = line.Replace("<ContourSheet>", "<SheetDefinition xsi:type=\"ContourSheet\">");
+                        niceFile.WriteLine(line);
+                    }
+                }
+            }
+            File.Delete(fileName + ".tmp");
+
         }
     }
 }

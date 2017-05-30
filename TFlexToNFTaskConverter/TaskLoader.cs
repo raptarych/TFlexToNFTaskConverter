@@ -112,12 +112,12 @@ namespace TFlexToNFTaskConverter
                         var part = new PartDefinition
                         {
                             ID = id,
-                            PartProfile = ReadNFProfile(itemFileName),
+                            OriginalPartProfile = ReadNFProfile(itemFileName),
                             Count = itemQuant,
                             DisableTurn = rotate == 0,
                             OverturnAllowed = reflect == 1
                         };
-                        part.Name = part.PartProfile.ItemName;
+                        part.Name = part.OriginalPartProfile.ItemName;
                         switch (rotStep)
                         {
                             case "PI":
@@ -162,7 +162,7 @@ namespace TFlexToNFTaskConverter
                                 var secondPoint = ParsePoint(GetValue(sheetFile.ReadLine()));
                                 var circleContour = new CircleContour
                                 {
-                                    Orientation = "Positive",
+                                    Orientation = !partProfile.Contours.Any() ? "Positive" : "Negative",
                                     Center = (firstPoint + secondPoint) / 2,
                                     Radius = (Math.Abs(firstPoint.X - secondPoint.X) + Math.Abs(firstPoint.Y - secondPoint.Y)) / 2
                                 };
@@ -170,7 +170,7 @@ namespace TFlexToNFTaskConverter
                                 continue;
                             }
                         }
-                        var contour = new FigureContour { Orientation = "Positive" };
+                        var contour = new FigureContour { Orientation = !partProfile.Contours.Any() ? "Positive" : "Negative" };
                         var lastPoint = new Point();
                         while (linesLeftToParse > 0)
                         {
@@ -187,10 +187,11 @@ namespace TFlexToNFTaskConverter
 
                                 //немного геометрии - вычисление центра дуги O, и затем радиуса
                                 //A - начало дуги, B - конец дуги, M - средняя точка между A и B
-                                var ang = Math.Atan(startPoint.B) * 720 / Math.PI;
+                                var ang = Math.Atan(startPoint.B) * -4;
                                 var AB = endPoint - startPoint;
                                 var AM = AB / 2;
-                                var MO = AM.Normalize().Rotate(90 * (ang > 0 ? 1 : -1)) * AM.Length * Math.Tan(Math.Abs(ang) / 2 - 90);
+                                var Normed = AM.Normalize();
+                                var MO = Normed.Rotate(Math.PI / 2 * (ang > 0 ? -1 : 1)) * AM.Length * Math.Tan((Math.Abs(ang) - Math.PI) / 2);
                                 var O = startPoint + AM + MO;
 
                                 var arc = new ContourArc
@@ -208,7 +209,7 @@ namespace TFlexToNFTaskConverter
                             //Line
                             else
                             {
-                                var Point = lastPoint as Point;
+                                var Point = lastPoint;
                                 if (Point != null && !Point.IsEmpty)    
                                 {
                                     var lineObj = new ContourLine { Begin = lastPoint, End = point };

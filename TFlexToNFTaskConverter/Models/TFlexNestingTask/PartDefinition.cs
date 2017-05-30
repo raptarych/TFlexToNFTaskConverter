@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
@@ -14,7 +16,8 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public int ID { get; set; }
         public int Count { get; set; }
         public string FilePath { get; set; }
-        public PartProfile PartProfile { get; set; }
+        [XmlElement]
+        public PartProfile OriginalPartProfile { get; set; }
         public double AngleStep { get; set; }
         public bool DisableTurn { get; set; }
         public bool OverturnAllowed { get; set; }

@@ -18,6 +18,16 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         [XmlIgnore]
         public double Length => Math.Sqrt(X * X + Y * Y);
         public Point Normalize() => this / Length;
+        public override bool Equals(object obj)
+        {
+            if (obj is Point)
+            {
+                var p2 = obj as Point;
+                return Math.Abs(X - p2.X) < 0.00001 && Math.Abs(Y - p2.Y) < 0.00001 && Math.Abs(B - p2.B) < 0.0000001;
+            }
+            return base.Equals(obj);
+        }
+
         public Point Rotate(double angle) => new Point {X = X * Math.Cos(angle) - Y * Math.Sin(angle), Y = Y * Math.Cos(angle) + X * Math.Sin(angle)};
         public static Point operator -(Point p1, Point p2) => new Point { X = p1.X - p2.X, Y = p1.Y - p2.Y};
         public static Point operator +(Point p1, Point p2) => new Point { X = p1.X + p2.X, Y = p1.Y + p2.Y };

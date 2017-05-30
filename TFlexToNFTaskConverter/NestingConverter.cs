@@ -20,11 +20,13 @@ namespace TFlexToNFTaskConverter
         /// </summary>
         private string FormatNumber(double x) => x != 0 ? (-x).ToString("##.#####").Replace(",", ".") : "0";
 
+        private string FormatBulge(double x) => x != 0 ? x.ToString("##.########").Replace(",", ".") : "0";
+
         /// <summary>
         /// Запись точки в файл формата NF
         /// </summary>
         private void AddVertex(StreamWriter partFile, Point p, double b = 0) =>
-            partFile.Write(string.Join("\t", "VERTEX:", FormatNumber(-p.X), FormatNumber(p.Y), FormatNumber(b)) + "\n");
+            partFile.Write(string.Join("\t", "VERTEX:", FormatNumber(-p.X), FormatNumber(p.Y), FormatBulge(b)) + "\n");
 
         /// <summary>
         /// Запись детали в отдельный файл
@@ -46,42 +48,46 @@ namespace TFlexToNFTaskConverter
                     case CircleContour circle:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 2) + "\n");
 
-                        var leftPoint = new Point { X = circle.Radius - circle.Center.X, Y = circle.Center.Y };
-                        var rightPoint = new Point { X = circle.Radius + circle.Center.X, Y = circle.Center.Y };
+                        var leftPoint = new Point { X = circle.Center.X - circle.Radius, Y = circle.Center.Y };
+                        var rightPoint = new Point { X = circle.Center.X + circle.Radius, Y = circle.Center.Y };
 
                         AddVertex(partFile, leftPoint, 1);
                         AddVertex(partFile, rightPoint, 1);
                         break;
                     case FigureContour figureContour:
-                        partFile.Write(string.Join("\t", "VERTQUANT:", figureContour.Objects.Count + 1) + "\n");
+                        var numObj = figureContour.Objects.Select(obj =>
+                        {
+                            if (obj is ContourArc)
+                                return 2;
+                            return 1;
+                        }).Sum();
+                        if (figureContour.Objects.All(obj => obj is ContourLine)) numObj++;
+                        partFile.Write(string.Join("\t", "VERTQUANT:", numObj) + "\n");
 
-                        //т.к. точка Begin текущего элемента контура равна End предыдущего элемента - нет смысла её писать в файл для всех элементов контуров кроме первого
-                        var isFirst = true; 
+                        var lastPoint = new Point();
 
                         foreach (var obj in figureContour.Objects)
                         {
                             switch (obj)
                             {
                                 case ContourArc arc:
-                                    var bulge = Math.Tan(arc.Angle / 4) * (arc.Ccw ? -1 : 1);
-                                    if (isFirst)
-                                    {
-                                        AddVertex(partFile, arc.Begin, bulge);
-                                        isFirst = false;
-                                    }
+                                    var bulge = Math.Tan(arc.Angle / -4);
+                                    AddVertex(partFile, arc.Begin, bulge);
                                     AddVertex(partFile, arc.End);
+                                    lastPoint = arc.End;
                                     break;
                                 default:
-                                    if (isFirst)
-                                    {
+                                    if (!obj.Begin.Equals(lastPoint))
                                         AddVertex(partFile, obj.Begin);
-                                        isFirst = false;
-                                    }
-                                    AddVertex(partFile, obj.End);
+                                    
+                                    lastPoint = obj.End;
+                                    AddVertex(partFile, lastPoint);
+                                    
                                     break;
                             }
                         }
                         break;
+                        
                 }
             }
         }
@@ -118,7 +124,7 @@ namespace TFlexToNFTaskConverter
                 using (var partFile = File.CreateText(filePath))
                 {
                     partFile.Write(string.Join("\t", "ITEMNAME:", part.Name) + "\n");
-                    WriteItemToFile(partFile, part.PartProfile);
+                    WriteItemToFile(partFile, part.OriginalPartProfile);
                     partFile.Close();
                 }
             }
@@ -199,10 +205,17 @@ namespace TFlexToNFTaskConverter
                         line = line.Replace("<FigureContour>", "<Contour xsi:type=\"FigureContour\">");
                         line = line.Replace("<CircleContour>", "<Contour xsi:type=\"CircleContour\">");
                         line = line.Replace("<RectangularContour>", "<Contour xsi:type=\"RectangularContour\">");
+                        line = line.Replace("</FigureContour>", "</Contour>");
+                        line = line.Replace("</CircleContour>", "</Contour>");
+                        line = line.Replace("</RectangularContour>", "</Contour>");
                         line = line.Replace("<ContourArc>", "<ContourObject xsi:type=\"ContourArc\">");
                         line = line.Replace("<ContourLine>", "<ContourObject xsi:type=\"ContourLine\">");
+                        line = line.Replace("</ContourArc>", "</ContourObject>");
+                        line = line.Replace("</ContourLine>", "</ContourObject>");
                         line = line.Replace("<RectangularSheet>", "<SheetDefinition xsi:type=\"RectangularSheet\">");
                         line = line.Replace("<ContourSheet>", "<SheetDefinition xsi:type=\"ContourSheet\">");
+                        line = line.Replace("</RectangularSheet>", "</SheetDefinition>");
+                        line = line.Replace("</ContourSheet>", "</SheetDefinition>");
                         niceFile.WriteLine(line);
                     }
                 }

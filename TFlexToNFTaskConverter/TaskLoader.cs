@@ -177,7 +177,7 @@ namespace TFlexToNFTaskConverter
                             }
                         }
                         var contour = new FigureContour { Orientation = !partProfile.Contours.Any() ? "Positive" : "Negative" };
-                        var lastPoint = new Point();
+                        Point lastPoint = null;
                         while (linesLeftToParse > 0)
                         {
                             var point = ParsePoint(GetValue(sheetFile.ReadLine()));
@@ -215,8 +215,7 @@ namespace TFlexToNFTaskConverter
                             //Line
                             else
                             {
-                                var Point = lastPoint;
-                                if (Point != null && !Point.IsEmpty)    
+                                if (lastPoint != null)    
                                 {
                                     var lineObj = new ContourLine { Begin = lastPoint, End = point };
                                     contour.Objects.Add(lineObj);
@@ -224,6 +223,7 @@ namespace TFlexToNFTaskConverter
                             }
                             lastPoint = point;
                         }
+                        contour.CloseContour();
                         partProfile.Contours.Add(contour);
                     }
                 }

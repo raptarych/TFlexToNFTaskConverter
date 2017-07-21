@@ -18,5 +18,13 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         XmlArrayItem(Type = typeof(ContourArc)),
         XmlArrayItem(Type = typeof(ContourLine))]
         public List<ContourObject> Objects { get; set; } = new List<ContourObject>();
+
+        public void CloseContour()
+        {
+            var firstPoint = Objects.FirstOrDefault()?.Begin;
+            var lastPoint = Objects.LastOrDefault()?.End;
+            if (!firstPoint?.Equals(lastPoint) ?? false)
+                Objects.Add(new ContourLine() {Begin = lastPoint, End = firstPoint});
+        }
     }
 }

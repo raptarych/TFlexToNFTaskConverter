@@ -15,9 +15,10 @@ namespace TFlexToNFTaskConverter
 
         public static string GetExtension(string S)
         {
+            S = S.ToLowerInvariant();
             var extension = string.Join("", S.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
             if (S == extension || string.IsNullOrEmpty(extension)) return "";
-            return extension;
+            return extension.Equals(S) ? string.Empty : extension;
         }
         static void CommandHandler(string S)
         {
@@ -86,13 +87,14 @@ namespace TFlexToNFTaskConverter
             
             if (args.Length == 2)
             {
-                if (GetExtension(args[0]) == "tfnesting" && !string.IsNullOrEmpty(args[1]))
+                if (GetExtension(args[0]) == "tfnesting" && !string.IsNullOrEmpty(args[1]) || !args[0].EndsWith("tfnesting") && GetExtension(args[1]) == "tfnesting")
                 {
                     //чуть костыльнул - может быть потом нормально перепишу
                     CommandHandler($"load {args[0]}");
                     CommandHandler($"save -nf {args[1]}");
                     return;
                 } else Console.WriteLine("Bad arguments\n");
+
 
             } else Console.WriteLine("Less then 2 arguments!\n");
             Console.WriteLine("Using:");

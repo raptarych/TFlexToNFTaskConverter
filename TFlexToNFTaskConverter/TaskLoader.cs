@@ -40,6 +40,12 @@ namespace TFlexToNFTaskConverter
             return new Point { X = x, Y =  -y, B = b };
         }
 
+        private string FormatPathForItems(string rawPath, string dirName)
+        {
+            if (Uri.IsWellFormedUriString(rawPath, UriKind.Absolute)) return rawPath;
+            return $"{dirName}\\{rawPath.Split('\\').Last()}";
+        }
+
         public TFlexTask LoadNfTask(string dirName)
         {
             var taskFileName = Directory.GetFiles(dirName).FirstOrDefault(file => Program.GetExtension(file) == "task");
@@ -82,7 +88,7 @@ namespace TFlexToNFTaskConverter
                         var sheet = new ContourSheet
                         {
                             ID = task.GetNewSheetId(),
-                            SheetProfile = ReadNFProfile(Uri.IsWellFormedUriString(value, UriKind.Absolute) ? value : $"{dirName}\\{value}")
+                            SheetProfile = ReadNFProfile(FormatPathForItems(value, dirName))
                         };
                         sheet.Name = sheet.SheetProfile.ItemName;
                         if (!int.TryParse(GetValue(taskFile.ReadLine()), out int sheetCount)) throw new Exception($"{dirName}\\{taskFileName}:{currentLine}: expected parameter SHEETCOUNT");
@@ -112,7 +118,7 @@ namespace TFlexToNFTaskConverter
                         var part = new PartDefinition
                         {
                             ID = id,
-                            OriginalPartProfile = ReadNFProfile(itemFileName),
+                            OriginalPartProfile = ReadNFProfile(FormatPathForItems(itemFileName, dirName)),
                             Count = itemQuant,
                             DisableTurn = rotate == 0,
                             OverturnAllowed = reflect == 1

@@ -18,7 +18,7 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public double RotationStep { get; set; } = 10;
         public double Resolution { get; set; } = 0.1d;
         public string StartFrom { get; set; } = "LeftBottom";
-        public int OptimizationLevel { get; set; } = 20;
+        public int OptimizationLevel { get; set; } = 100;
         public string Direction { get; set; } = "DirectionX";
         public int Flexure { get; set; } = 0;
         public double PresentationPrecisionRatio { get; set; } = 0.005d;

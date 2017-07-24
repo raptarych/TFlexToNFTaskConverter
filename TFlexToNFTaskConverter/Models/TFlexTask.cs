@@ -16,7 +16,7 @@ namespace TFlexToNFTaskConverter.Models
     public class TFlexTask
     {
         public string Name { get; set; }
-        public string ProjectType { get; set; }
+        public string ProjectType { get; set; } = "FigureCutting";
         [XmlArray("Parts")]
         public List<PartDefinition> Parts { get; set; } = new List<PartDefinition>();
 
@@ -30,6 +30,9 @@ namespace TFlexToNFTaskConverter.Models
         [XmlArray("Results")]
         [XmlArrayItem("NestingResult")]
         public List<NestingResult> Results { get; set; } = new List<NestingResult>();
+
+        public SettingsModel Settings { get; set; } = new SettingsModel();
+        public GuillotineParamsModel GuillotineParams { get; set; } = new GuillotineParamsModel();
 
         public int GetNewSheetId() => Sheets.Any() ? Sheets.Max(sheet => sheet.ID) + 1 : 0;
         public int GetNewPartId() => Parts.Any() ? Parts.Max(part => part.ID) + 1 : 0;

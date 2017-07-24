@@ -162,8 +162,8 @@ namespace TFlexToNFTaskConverter
                     }
                     taskFile.Write(string.Join("\t", "SHEETQUANT:", sheet.Count) + "\n");
                 }
-                taskFile.Write(string.Join("\t", "ITEM2DOMAINDIST:", 5) + "\n");    //TODO
-                taskFile.Write(string.Join("\t", "ITEM2ITEMDIST:", 5) + "\n");      //TODO
+                taskFile.Write(string.Join("\t", "ITEM2DOMAINDIST:", input.FigureParams.PartDistance) + "\n");
+                taskFile.Write(string.Join("\t", "ITEM2ITEMDIST:", input.FigureParams.PartDistance) + "\n");
                 foreach (var item in input.Parts)
                 {
                     taskFile.Write(string.Join("\t", "ITEMFILE:", $"{item.ID}.item") + "\n");

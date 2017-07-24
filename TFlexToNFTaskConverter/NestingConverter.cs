@@ -185,6 +185,7 @@ namespace TFlexToNFTaskConverter
 
         public void SaveToTFlex(TFlexTask input, string fileName, string folderPath)
         {
+            input.Parts.ForEach(part => part.PartProfile = part.OriginalPartProfile);
             fileName = $"{folderPath}\\{fileName}";
             if (!fileName.EndsWith(".tfnesting")) fileName = $"{fileName}.tfnesting";
 

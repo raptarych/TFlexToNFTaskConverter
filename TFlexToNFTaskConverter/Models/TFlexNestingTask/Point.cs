@@ -28,10 +28,28 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
             return base.Equals(obj);
         }
 
+        protected bool Equals(Point other)
+        {
+            return X.Equals(other.X) && Y.Equals(other.Y) && B.Equals(other.B);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = X.GetHashCode();
+                hashCode = (hashCode * 397) ^ Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ B.GetHashCode();
+                return hashCode;
+            }
+        }
+
         public Point Rotate(double angle) => new Point {X = X * Math.Cos(angle) - Y * Math.Sin(angle), Y = Y * Math.Cos(angle) + X * Math.Sin(angle)};
         public static Point operator -(Point p1, Point p2) => new Point { X = p1.X - p2.X, Y = p1.Y - p2.Y};
         public static Point operator +(Point p1, Point p2) => new Point { X = p1.X + p2.X, Y = p1.Y + p2.Y };
         public static Point operator /(Point p1, double i) => new Point { X = p1.X / i, Y = p1.Y / i };
         public static Point operator *(Point p1, double i) => new Point { X = p1.X * i, Y = p1.Y * i };
+
+        public override string ToString() => $"[{X},{Y}]";
     }
 }

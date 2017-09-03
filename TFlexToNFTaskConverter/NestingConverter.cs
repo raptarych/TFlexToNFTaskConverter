@@ -31,7 +31,7 @@ namespace TFlexToNFTaskConverter
         /// <summary>
         /// Запись детали в отдельный файл
         /// </summary>
-        private void WriteItemToFile(StreamWriter partFile, PartProfile part)
+        private void WriteItemToFile(StreamWriter partFile, PartProfile part, bool isSheet = false)
         {
             foreach (var contour in part.Contours)
             {
@@ -40,11 +40,20 @@ namespace TFlexToNFTaskConverter
                     case RectangularContour rect:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 4) + "\n");
                         AddVertex(partFile, new Point());
-                        AddVertex(partFile, new Point { X = rect.Width });
-                        AddVertex(partFile, new Point { X = rect.Width, Y = rect.Length });
-                        AddVertex(partFile, new Point { Y = rect.Length });
+                        if (isSheet)
+                        {
+                            AddVertex(partFile, new Point {X = rect.Length });
+                            AddVertex(partFile, new Point {X = rect.Length, Y = rect.Width});
+                            AddVertex(partFile, new Point {Y = rect.Width });
+                        }
+                        else
+                        {
+                            AddVertex(partFile, new Point { X = rect.Width });
+                            AddVertex(partFile, new Point { X = rect.Width, Y = rect.Length });
+                            AddVertex(partFile, new Point { Y = rect.Length });
+                        }
 
-                        break;
+                break;
                     case CircleContour circle:
                         partFile.Write(string.Join("\t", "VERTQUANT:", 2) + "\n");
 
@@ -136,7 +145,7 @@ namespace TFlexToNFTaskConverter
                 {
                     sheetFile.Write(string.Join("\t", "ITEMNAME:", sheet.Name ?? sheet.ID.ToString()) + "\n");
                     if (sheet is ContourSheet cont)
-                        WriteItemToFile(sheetFile, cont.SheetProfile);
+                        WriteItemToFile(sheetFile, cont.SheetProfile, true);
                     sheetFile.Close();
                 }
             }

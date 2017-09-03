@@ -31,13 +31,13 @@ namespace TFlexToNFTaskConverter
 
         public string GetValue(string line) => new string(line?.SkipWhile(ch => ch != '\t').Skip(1).ToArray());
 
-        public Point ParsePoint(string value)
+        public Point ParsePoint(string value, bool isSheet = false)
         {
             var split = value.Split('\t');
             double.TryParse(split[0].Replace('.', ','), out double x);
             double.TryParse(split[1].Replace('.', ','), out double y);
             double.TryParse(split[2].Replace('.', ','), out double b);
-            return new Point { X = x, Y =  -y, B = b };
+            return new Point { X = isSheet ? -y : x, Y = isSheet ? x : -y, B = b };
         }
 
         private string FormatPathForItems(string rawPath, string dirName)
@@ -88,7 +88,7 @@ namespace TFlexToNFTaskConverter
                         var sheet = new ContourSheet
                         {
                             ID = task.GetNewSheetId(),
-                            SheetProfile = ReadNFProfile(FormatPathForItems(value, dirName))
+                            SheetProfile = ReadNFProfile(FormatPathForItems(value, dirName), true)
                         };
                         sheet.Name = sheet.SheetProfile.ItemName;
                         if (!int.TryParse(GetValue(taskFile.ReadLine()), out int sheetCount)) throw new Exception($"{dirName}\\{taskFileName}:{currentLine}: expected parameter SHEETCOUNT");
@@ -143,7 +143,7 @@ namespace TFlexToNFTaskConverter
             return task;
         }
 
-        private PartProfile ReadNFProfile(string filePath)
+        private PartProfile ReadNFProfile(string filePath, bool isSheet = false)
         {
             var partProfile = new PartProfile();
             using (var sheetFile = new StreamReader(filePath))
@@ -180,7 +180,7 @@ namespace TFlexToNFTaskConverter
                         Point lastPoint = null;
                         while (linesLeftToParse > 0)
                         {
-                            var point = ParsePoint(GetValue(sheetFile.ReadLine()));
+                            var point = ParsePoint(GetValue(sheetFile.ReadLine()), isSheet);
                             linesLeftToParse--;
 
                             //Arc

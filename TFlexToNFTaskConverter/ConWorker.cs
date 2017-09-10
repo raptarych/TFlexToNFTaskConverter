@@ -5,7 +5,7 @@ namespace TFlexToNFTaskConverter
     /// <summary>
     /// Вспомогательный класс для работы с консолью
     /// </summary>
-    class ConWorker
+    public class ConWorker
     {
         private string InputString { get; set; }
         public delegate void ProcessInput(string input);

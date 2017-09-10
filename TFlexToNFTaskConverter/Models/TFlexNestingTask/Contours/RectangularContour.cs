@@ -10,5 +10,9 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     {
         public double Width { get; set; }
         public double Length { get; set; }
+        public override void RotateAroundPoint(double ang, Point p)
+        {
+            //do nothing
+        }
     }
 }

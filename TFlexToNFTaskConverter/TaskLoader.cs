@@ -5,7 +5,7 @@ using TFlexToNFTaskConverter.Models;
 
 namespace TFlexToNFTaskConverter
 {
-    class TaskLoader
+    public class TaskLoader
     {
         private void LogToConsole(TFlexTask entity)
         {

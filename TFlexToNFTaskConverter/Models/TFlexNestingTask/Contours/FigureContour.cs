@@ -26,5 +26,10 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
             if (!firstPoint?.Equals(lastPoint) ?? false)
                 Objects.Add(new ContourLine() {Begin = lastPoint, End = firstPoint});
         }
+
+        public override void RotateAroundPoint(double ang, Point p)
+        {
+            foreach (var obj in Objects) obj.RotateAroundPoint(ang, p);
+        }
     }
 }

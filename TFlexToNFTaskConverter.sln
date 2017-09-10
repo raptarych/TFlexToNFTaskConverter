@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTaskConverter", "TFlexToNFTaskConverter\TFlexToNFTaskConverter.csproj", "{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTaskInfoCollector", "TFlexToNFTaskInfoCollector\TFlexToNFTaskInfoCollector.csproj", "{973CFA08-CBAB-4D90-9581-B27B4D61C5A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3} = {86D2E3B5-E853-4F63-AE32-4E10A7790AC3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTask.Tests", "TFlexToNFTaskInfoCollector.Test\TFlexToNFTask.Tests.csproj", "{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3} = {86D2E3B5-E853-4F63-AE32-4E10A7790AC3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,14 @@ Global
 		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{973CFA08-CBAB-4D90-9581-B27B4D61C5A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973CFA08-CBAB-4D90-9581-B27B4D61C5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973CFA08-CBAB-4D90-9581-B27B4D61C5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973CFA08-CBAB-4D90-9581-B27B4D61C5A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

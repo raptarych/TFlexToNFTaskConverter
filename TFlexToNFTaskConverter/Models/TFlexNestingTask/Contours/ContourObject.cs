@@ -13,5 +13,11 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     {
         public Point Begin { get; set; }
         public Point End { get; set; }
+
+        public virtual void RotateAroundPoint(double ang, Point p = null)
+        {
+            Begin = Begin.Rotate(ang, p);
+            End = End.Rotate(ang, p);
+        }
     }
 }

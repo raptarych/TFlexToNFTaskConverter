@@ -44,7 +44,16 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
             }
         }
 
-        public Point Rotate(double angle) => new Point {X = X * Math.Cos(angle) - Y * Math.Sin(angle), Y = Y * Math.Cos(angle) + X * Math.Sin(angle)};
+        public Point Rotate(double angle, Point point = null)
+        {
+            angle = angle * Math.PI / 180;
+            return new Point
+            {
+                X = point?.X ?? 0 + (X - point?.X ?? 0) * Math.Cos(angle) - (Y - point?.Y ?? 0) * Math.Sin(angle),
+                Y = point?.Y ?? 0 + (Y - point?.Y ?? 0) * Math.Cos(angle) + (X - point?.X ?? 0) * Math.Sin(angle)
+            };
+        }
+
         public static Point operator -(Point p1, Point p2) => new Point { X = p1.X - p2.X, Y = p1.Y - p2.Y};
         public static Point operator +(Point p1, Point p2) => new Point { X = p1.X + p2.X, Y = p1.Y + p2.Y };
         public static Point operator /(Point p1, double i) => new Point { X = p1.X / i, Y = p1.Y / i };

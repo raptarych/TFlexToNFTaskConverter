@@ -10,8 +10,9 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     /// <summary>
     /// Базовая сущность контура
     /// </summary>
-    public class Contour
+    public abstract class Contour
     {
         public string Orientation { get; set; }
+        public abstract void RotateAroundPoint(double ang, Point p = null);
     }
 }

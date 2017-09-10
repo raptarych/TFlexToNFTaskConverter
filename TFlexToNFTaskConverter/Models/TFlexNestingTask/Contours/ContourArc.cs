@@ -15,5 +15,10 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public double Radius { get; set; }
         public double Angle { get; set; }
         public bool Ccw { get; set; }
+        public override void RotateAroundPoint(double ang, Point p = null)
+        {
+            base.RotateAroundPoint(ang, p);
+            Center = Center.Rotate(ang, p);
+        }
     }
 }

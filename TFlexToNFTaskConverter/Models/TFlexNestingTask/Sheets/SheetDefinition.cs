@@ -12,5 +12,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         public bool Exclude { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
+        public virtual string Type => GetType().Name;
     }
 }

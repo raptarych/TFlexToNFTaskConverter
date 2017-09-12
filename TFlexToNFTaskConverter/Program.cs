@@ -66,6 +66,12 @@ namespace TFlexToNFTaskConverter
                         if (string.IsNullOrEmpty(fileName)) return;
                         var converter = new NestingConverter();
                         converter.SaveToTFlex(Buffer, fileName, Directory.GetCurrentDirectory());
+                    } else if (commandName.ToLowerInvariant() == "-json")
+                    {
+                        fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
+                        if (string.IsNullOrEmpty(fileName)) return;
+                        var converter = new NestingConverter();
+                        converter.SaveToJson(Buffer, fileName, Directory.GetCurrentDirectory());
                     }
                 }
             }

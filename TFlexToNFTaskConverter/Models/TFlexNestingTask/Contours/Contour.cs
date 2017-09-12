@@ -13,5 +13,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     public class Contour
     {
         public string Orientation { get; set; }
+        public virtual string Type => GetType().Name;
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using TFlexToNFTaskConverter.Models;
 using TFlexToNFTaskConverter.Models.TFlexNestingTask;
 
@@ -232,6 +235,25 @@ namespace TFlexToNFTaskConverter
             }
             File.Delete(fileName + ".tmp");
 
+        }
+
+        public void SaveToJson(TFlexTask buffer, string fileName, string getCurrentDirectory)
+        {
+            var jsonSettings = new JsonSerializerSettings
+            {
+                DateFormatString = "yyyy-MM-dd HH:mm:ss",
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                Culture = CultureInfo.CurrentCulture,
+                TypeNameHandling = TypeNameHandling.None
+            };
+            if (!fileName.EndsWith(".json")) fileName = $"{fileName}.json";
+            using (var file = File.CreateText(fileName))
+            {
+                file.Write(JsonConvert.SerializeObject(buffer, jsonSettings));
+                file.Close();
+            }
         }
     }
 }

@@ -13,5 +13,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     {
         public Point Begin { get; set; }
         public Point End { get; set; }
+        public virtual string Type => GetType().Name;
     }
 }

@@ -14,5 +14,6 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
     {
         public string Orientation { get; set; }
         public abstract void RotateAroundPoint(double ang, Point p = null);
+        public virtual string Type => GetType().Name;
     }
 }

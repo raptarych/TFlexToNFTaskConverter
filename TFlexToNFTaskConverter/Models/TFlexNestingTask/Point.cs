@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
 {
@@ -14,8 +15,10 @@ namespace TFlexToNFTaskConverter.Models.TFlexNestingTask
         [XmlIgnore]
         public double B { get; set; }
         [XmlIgnore]
+        [JsonIgnore]
         public bool IsEmpty => Math.Abs(X) < 0.0001 && Math.Abs(Y) < 0.0001 && Math.Abs(B) < 0.0001;
         [XmlIgnore]
+        [JsonIgnore]
         public double Length => Math.Sqrt(X * X + Y * Y);
         public Point Normalize() => this / Length;
         public override bool Equals(object obj)

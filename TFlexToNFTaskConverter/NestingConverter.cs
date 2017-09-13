@@ -16,7 +16,7 @@ namespace TFlexToNFTaskConverter
     /// <summary>
     /// Класс для конвертирования задания и разультатов раскроя
     /// </summary>
-    class NestingConverter
+    public class NestingConverter
     {
         /// <summary>
         /// Вспомогательный метод - приведение координаты к съедаемому NF виду
@@ -237,7 +237,7 @@ namespace TFlexToNFTaskConverter
 
         }
 
-        public void SaveToJson(TFlexTask buffer, string fileName, string getCurrentDirectory)
+        public void SaveToJson(TFlexTask buffer, string fileName)
         {
             var jsonSettings = new JsonSerializerSettings
             {
@@ -253,6 +253,17 @@ namespace TFlexToNFTaskConverter
             {
                 file.Write(JsonConvert.SerializeObject(buffer, jsonSettings));
                 file.Close();
+            }
+        }
+
+        public void SaveFromNfToJson()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            var dirs = Directory.GetDirectories(currentDir);
+            foreach (var dir in dirs)
+            {
+                var converter = new NFToJsonConverter();
+                converter.Convert(dir);
             }
         }
     }

@@ -71,6 +71,7 @@
     <Compile Include="NFFileReader.cs" />
     <Compile Include="NFItemReader.cs" />
     <Compile Include="NFTaskReader.cs" />
+    <Compile Include="NFToJsonConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskLoader.cs" />

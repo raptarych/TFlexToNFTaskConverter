@@ -71,8 +71,12 @@ namespace TFlexToNFTaskConverter
                         fileName = string.Join("", fileName.SkipWhile(ch => ch != ' ').Skip(1));
                         if (string.IsNullOrEmpty(fileName)) return;
                         var converter = new NestingConverter();
-                        converter.SaveToJson(Buffer, fileName, Directory.GetCurrentDirectory());
+                        converter.SaveToJson(Buffer, fileName);
                     }
+                }
+                if (commandName == "toJson")
+                {
+                    
                 }
             }
             catch (Exception ex)

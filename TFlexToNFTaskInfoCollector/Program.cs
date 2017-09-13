@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TFlexToNFTaskConverter;
@@ -14,6 +15,8 @@ namespace TFlexToNFTaskInfoCollector
                 var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
                 if (commandName == "calc")
                 {
+                    var jsonConverter = new NestingConverter();
+                    jsonConverter.SaveFromNfToJson();
                     var dirs = Directory.GetDirectories(AppDomain.CurrentDomain.BaseDirectory);
                     foreach (var dir in dirs)
                     {
@@ -53,7 +56,15 @@ namespace TFlexToNFTaskInfoCollector
                             /*var rightSide = task.RightSide();*/
                             Console.WriteLine($"Size: {domainSize}x{listY} ({domainSize*listY}), fact size: {maxSize}x{listY} ({maxSize * listY}), NF ratio: {nfRatio}, areas {itemArea}, ratio fact: {factRatio}");
 
-
+                            var pr = new Process
+                            {
+                                StartInfo =
+                                {
+                                    FileName = "json2dbs.bat",
+                                    Arguments = $@"--output={dirName}.json --force {dirName}\to_dbs.json"
+                                }
+                            };
+                            pr.Start();
                         }
                     }
                 }

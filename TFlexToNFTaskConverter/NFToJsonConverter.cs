@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,29 @@ namespace TFlexToNFTaskConverter
     }
     public class NFToJsonConverter
     {
+        public static void ConvertToDbs(string dirName, string fileName)
+        {
+            var pr = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "json2dbs.bat",
+                    Arguments = $@"--output={dirName}\{fileName} --force {dirName}\{fileName}.json"
+                }
+            };
+            pr.Start();
+        }
+
         public void Convert(string dir)
         {
             var taskFilename = Directory.GetFiles(dir).FirstOrDefault(file => Program.GetExtension(file) == "task");
             if (taskFilename == null) return;
+            var kolList = new List<string>();
             var items = new List<JsonDbsModel>();
             using (var taskFile = File.OpenText(taskFilename))
             {
+                var kolStringToWrite = "";
+                
                 while (!taskFile.EndOfStream)
                 {
                     var line = taskFile.ReadLine();
@@ -32,13 +49,22 @@ namespace TFlexToNFTaskConverter
                     if (line.StartsWith("DOMAINFILE:"))
                     {
                         var domainPath = line.Split('\t')[1];
+                        var item = new JsonDbsModel();
                         if(Path.IsPathRooted(domainPath))
                         {
-                            using (var itemFile = File.OpenText(domainPath)) items.Add(ReadItem(itemFile));
+                            using (var itemFile = File.OpenText(domainPath)) item = ReadItem(itemFile);
                         }
                         else
                         {
-                            using (var itemFile = File.OpenText($"{dir}\\{domainPath}")) items.Add(ReadItem(itemFile));
+                            using (var itemFile = File.OpenText($"{dir}\\{domainPath}")) item = ReadItem(itemFile);
+                        }
+                        using (var jsonFile = File.CreateText($"{dir}\\list.json"))
+                        {
+                            jsonFile.Write(JsonConvert.SerializeObject(new List<JsonDbsModel> { item }));
+                            var dirName = dir.Split('\\').LastOrDefault();
+                            ConvertToDbs(dirName, "list");
+                            kolList.Add($"{dir}\\list.dbs 1 0");
+                            items.Add(item);
                         }
                     }
                     if (line.StartsWith("WIDTH"))
@@ -46,7 +72,7 @@ namespace TFlexToNFTaskConverter
                         var width = double.Parse(line.Split('\t')[1].Replace(".", ","));
                         line = taskFile.ReadLine();
                         var height = double.Parse(line.Split('\t')[1].Replace(".", ","));
-                        items.Add(new JsonDbsModel
+                        var item = new JsonDbsModel
                         {
                             PartId = "list",
                             Paths = new List<List<List<double>>>
@@ -56,28 +82,55 @@ namespace TFlexToNFTaskConverter
                                     new List<double> { 0, 0, 0 },
                                     new List<double> { width, 0, 0 },
                                     new List<double> { width, height, 0 },
-                                    new List<double> {0, height, 0 },
+                                    new List<double> { 0, height, 0 },
                                     new List<double> { 0, 0, 0 }
                                 }
                             }
-                        });
-
+                        };
+                        using (var jsonFile = File.CreateText($"{dir}\\list.json"))
+                        {
+                            jsonFile.Write(JsonConvert.SerializeObject(new List<JsonDbsModel> { item }));
+                            var dirName = dir.Split('\\').LastOrDefault();
+                            ConvertToDbs(dirName, "list");
+                            kolList.Add($"{dir}\\list.dbs 1 0");
+                            items.Add(item);
+                        }
+                    }
+                    if (line.StartsWith("ITEMQUANT"))
+                    {
+                        kolList.Add(kolStringToWrite + $" {line.Split('\t')[1]} 1");
                     }
                     if (!line.StartsWith("ITEMFILE:")) continue;
                     var path = line.Split('\t')[1];
+                    var itemModel = new JsonDbsModel();
+                    var itemName = path.Split('\\').LastOrDefault()?.Replace(".item", "");
                     if (Path.IsPathRooted(path))
                     {
-                        using (var itemFile = File.OpenText(path)) items.Add(ReadItem(itemFile));
+                        using (var itemFile = File.OpenText(path)) itemModel = ReadItem(itemFile);
                     }
                     else
                     {
-                        using (var itemFile = File.OpenText($"{dir}\\{path}")) items.Add(ReadItem(itemFile));
+                        using (var itemFile = File.OpenText($"{dir}\\{path}")) itemModel = ReadItem(itemFile);
+                    }
+                    using (var jsonFile = File.CreateText($"{dir}\\{itemName}.json"))
+                    {
+                        jsonFile.Write(JsonConvert.SerializeObject(new List<JsonDbsModel> { itemModel }));
+                        var dirName = dir.Split('\\').LastOrDefault();
+                        ConvertToDbs(dirName, itemName);
+                        kolStringToWrite = $"{dir}\\{itemName}.dbs";
+                        items.Add(itemModel);
                     }
                 }
             }
-            using (var jsonFile = File.CreateText($"{dir}\\to_dbs.json"))
+            using (var kolFile = File.CreateText($"{dir}\\nest.kol"))
             {
-                jsonFile.Write(JsonConvert.SerializeObject(items));
+                kolFile.Write(string.Join("\n", kolList));
+            }
+            using (var dbsFile = File.CreateText($"{dir}\\nest.json"))
+            {
+                dbsFile.Write(JsonConvert.SerializeObject(items));
+                var dirName = dir.Split('\\').LastOrDefault();
+                ConvertToDbs(dirName, "nest");
             }
         }
 
@@ -97,6 +150,9 @@ namespace TFlexToNFTaskConverter
                 {
                     if (currentContour.Any())
                     {
+                        var lastPoint = currentContour.Last();
+                        var firstPoint = currentContour.First();
+                        if (lastPoint[0] != firstPoint[0] || lastPoint[1] != firstPoint[1]) currentContour.Add(firstPoint);
                         item.Paths.Add(currentContour);
                         currentContour = new List<List<double>>();
                     }
@@ -110,6 +166,13 @@ namespace TFlexToNFTaskConverter
                     }
                     
                 }
+            }
+            if (currentContour.Any())
+            {
+                var lastPoint = currentContour.Last();
+                var firstPoint = currentContour.First();
+                if (lastPoint[0] != firstPoint[0] || lastPoint[1] != firstPoint[1]) currentContour.Add(firstPoint);
+                item.Paths.Add(currentContour);
             }
             return item;
         }

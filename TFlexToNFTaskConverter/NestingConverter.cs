@@ -131,6 +131,7 @@ namespace TFlexToNFTaskConverter
 
             foreach (var part in input.Parts)
             {
+                if (part.Exclude) continue;
                 var filePath = $"{destination}\\{part.ID}.item";
 
                 using (var partFile = File.CreateText(filePath))
@@ -168,8 +169,8 @@ namespace TFlexToNFTaskConverter
                             taskFile.Write(string.Join("\t", "DOMAINFILE:", $"{cont.ID}_sheet.item") + "\n");
                             break;
                         case RectangularSheet rect:
-                            taskFile.Write(string.Join("\t", "WIDTH:", FormatNumber(rect.Width)) + "\n");
-                            taskFile.Write(string.Join("\t", "LENGTH:", FormatNumber(rect.Length)) + "\n");
+                            taskFile.Write(string.Join("\t", "WIDTH:", Math.Abs((int) rect.Width)) + "\n");
+                            taskFile.Write(string.Join("\t", "LENGTH:", Math.Abs((int) rect.Length)) + "\n");
                             break;
                     }
                     taskFile.Write(string.Join("\t", "SHEETQUANT:", sheet.Count) + "\n");
@@ -178,6 +179,7 @@ namespace TFlexToNFTaskConverter
                 taskFile.Write(string.Join("\t", "ITEM2ITEMDIST:", input.FigureParams.PartDistance) + "\n");
                 foreach (var item in input.Parts)
                 {
+                    if (item.Exclude) continue;
                     taskFile.Write(string.Join("\t", "ITEMFILE:", $"{item.ID}.item") + "\n");
                     taskFile.Write(string.Join("\t", "ITEMQUANT:", item.Count) + "\n");
                     taskFile.Write(string.Join("\t", "ROTATE:", item.DisableTurn ? 0 : 1) + "\n");
@@ -256,7 +258,7 @@ namespace TFlexToNFTaskConverter
             }
         }
 
-        public void SaveFromNfToJson()
+        public void SaveFromNfToDbs()
         {
             var currentDir = Directory.GetCurrentDirectory();
             var dirs = Directory.GetDirectories(currentDir);

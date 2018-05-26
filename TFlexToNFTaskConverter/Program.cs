@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using TFlexToNFTaskConverter.Models;
 
 namespace TFlexToNFTaskConverter
@@ -13,19 +9,19 @@ namespace TFlexToNFTaskConverter
     {
         private static TFlexTask Buffer;
 
-        public static string GetExtension(string S)
+        public static string GetExtension(string s)
         {
-            S = S.ToLowerInvariant();
-            var extension = string.Join("", S.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
-            if (S == extension || string.IsNullOrEmpty(extension)) return "";
-            return extension.Equals(S) ? string.Empty : extension;
+            s = s.ToLowerInvariant();
+            var extension = string.Join("", s.Reverse().TakeWhile(ch => ch != '.').Reverse()).ToLowerInvariant();
+            if (s == extension || string.IsNullOrEmpty(extension)) return "";
+            return extension.Equals(s) ? string.Empty : extension;
         }
-        static void CommandHandler(string S)
+        static void CommandHandler(string s)
         {
             try
             {
-                var commandName = string.Join("", S.TakeWhile(ch => ch != ' '));
-                var fileName = string.Join("", S.SkipWhile(ch => ch != ' ').Skip(1));
+                var commandName = string.Join("", s.TakeWhile(ch => ch != ' '));
+                var fileName = string.Join("", s.SkipWhile(ch => ch != ' ').Skip(1));
                 if (commandName == "load")
                 {
                     var loader = new TaskLoader();
@@ -97,16 +93,20 @@ namespace TFlexToNFTaskConverter
             
             if (args.Length == 2)
             {
-                if (GetExtension(args[0]) == "tfnesting" && !string.IsNullOrEmpty(args[1]) || !args[0].EndsWith("tfnesting") && GetExtension(args[1]) == "tfnesting")
-                {
-                    //чуть костыльнул - может быть потом нормально перепишу
-                    CommandHandler($"load {args[0]}");
+                
+                //чуть костыльнул - может быть потом нормально перепишу
+                CommandHandler($"load {args[0]}");
+                if (args[1].EndsWith(".tfnesting"))
+                    CommandHandler($"save -tflex {args[1]}");
+                else if (args[1].EndsWith(".json"))
+                    CommandHandler($"save -json {args[1]}");
+                else
                     CommandHandler($"save -nf {args[1]}");
-                    return;
-                } else Console.WriteLine("Bad arguments\n");
+                return;
 
 
-            } else Console.WriteLine("Less then 2 arguments!\n");
+            }
+            Console.WriteLine("Less then 2 arguments!\n");
             Console.WriteLine("Using:");
             Console.WriteLine("TFlexToNFTaskConverter.exe task.tfnesting out_nf_folder");
         }

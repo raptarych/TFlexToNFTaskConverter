@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTaskConverter", "TFlexToNFTaskConverter\TFlexToNFTaskConverter.csproj", "{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}"
 EndProject
@@ -12,8 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTaskInfoCollector"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlexToNFTask.Tests", "TFlexToNFTaskInfoCollector.Test\TFlexToNFTask.Tests.csproj", "{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}"
 	ProjectSection(ProjectDependencies) = postProject
+		{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320} = {BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}
 		{86D2E3B5-E853-4F63-AE32-4E10A7790AC3} = {86D2E3B5-E853-4F63-AE32-4E10A7790AC3}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbsShit", "DbsShit\DbsShit.csproj", "{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +36,15 @@ Global
 		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7387F9E4-0CE4-4190-B54E-FE94D2D6460C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {005E7FB0-0E0A-4470-9383-A9C20B052D6B}
 	EndGlobalSection
 EndGlobal

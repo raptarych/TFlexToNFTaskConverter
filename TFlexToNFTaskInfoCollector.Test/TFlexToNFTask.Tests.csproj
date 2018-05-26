@@ -48,13 +48,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbsTest.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nested.dbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+	<ProjectReference Include="..\DbsShit\DbsShit.csproj">
+      <Project>{BBC9DC25-1C94-49F9-9F0E-F7F1CC91F320}</Project>
+      <Name>DbsShit</Name>
+	</ProjectReference>
     <ProjectReference Include="..\TFlexToNFTaskConverter\TFlexToNFTaskConverter.csproj">
       <Project>{86D2E3B5-E853-4F63-AE32-4E10A7790AC3}</Project>
       <Name>TFlexToNFTaskConverter</Name>
